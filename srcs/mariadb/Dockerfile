@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install mariadb-server curl -y \
     && rm -rf /var/lib/apt/lists/*
 
 RUN service mysql start \
-    && mysql -e "UPDATE mysql.user SET Password = PASSWORD('$MYSQL_ROOT_PASSWORD') WHERE User = 'root';" \
+    && mysql -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('$MYSQL_ROOT_PASSWORD');" \
     && mysql -e "DROP USER IF EXISTS ''@'$hostname';" \
     && mysql -e "DROP DATABASE IF EXISTS test;" \
     && mysql -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE;" \
@@ -20,4 +20,4 @@ RUN service mysql start \
 
 EXPOSE 3306
 
-ENTRYPOINT [ "mysqld", "--bind-address=0.0.0.0" ]
+ENTRYPOINT [ "mysqld_safe", "--bind_address=0.0.0.0" ]
