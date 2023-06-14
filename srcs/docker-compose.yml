@@ -1,5 +1,4 @@
 version: '3.8'
-# name: inception
 
 services:
   wordpress:
@@ -17,10 +16,14 @@ services:
       - .env
     volumes:
       - WordPress:/var/www/html
+    logging:
+      driver: journald
+      options:
+        tag: wordpress-logs
     networks:
       - inception
     ports:
-      - 9000:9000
+      - 9000
     depends_on:
       mariadb:
         condition: service_healthy
@@ -38,6 +41,10 @@ services:
         - MYSQL_PASSWORD
     volumes:
       - DB:/var/lib/mysql
+    logging:
+      driver: journald
+      options:
+        tag: mariadb-logs
     networks:
       - inception
     ports:
@@ -55,10 +62,14 @@ services:
       dockerfile: Dockerfile
     volumes:
       - WordPress:/var/www/html
+    logging:
+      driver: journald
+      options:
+        tag: nginx-logs
     networks:
       - inception
     ports:
-      - 80:80
+      - 443:443
     depends_on:
       - wordpress
     restart: on-failure

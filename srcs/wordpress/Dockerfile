@@ -31,6 +31,5 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 
 EXPOSE 9000
 
-## rewrite this
 USER root
 CMD ["sh", "./entrypoint.sh"]
